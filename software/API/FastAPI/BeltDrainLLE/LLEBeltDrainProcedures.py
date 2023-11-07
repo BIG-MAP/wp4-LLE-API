@@ -875,6 +875,13 @@ def getImageDataFolderPath(idN: int)-> str:
     else:
         return "Data id does not exist"
     
+def getLastCountNumber()->int:
+
+    with open(os.path.dirname(__file__)+'/count.txt', "r") as counterFile:
+        countNumber = int(counterFile.read())-1
+
+    return countNumber
+    
 def getLastImageDataFolderPath()-> str:
 
     with open(os.path.dirname(__file__)+'/count.txt', "r") as counterFile:

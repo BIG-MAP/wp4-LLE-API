@@ -478,6 +478,27 @@ class LiquidExtractor:
 
         self.status = Status.finished
 
+    def getLastCountId(self):
+        lastDataNumber = LLEProc.getLastCountNumber()
+        return lastDataNumber
+
+    def returnFindInterface(self,lType):
+        LLEProc.setLiquidType(lType)
+        lastDataNumber = LLEProc.getLastCountNumber()
+        df, dfRaw = self.returnSensorData(lastDataNumber)
+        interfaceFound, interfacePosition, error = LLEProc.findInterface(df,
+                                                                         self.settings.detectionSettings.smoothWindowSize,
+                                                                         self.settings.detectionSettings.smoothProminence,
+                                                                         self.settings.detectionSettings.gradient2Prominence)
+        if error != "":
+            self.error = self.error + ", " + error
+
+
+        return interfaceFound, interfacePosition
+
+
+
+
 
 # Create app
 app = FastAPI()
@@ -548,6 +569,10 @@ async def do_ScanFind_Run(lType: str, settings: Settings = None, background_task
     background_tasks.add_task(extractor.startScanAndFind, lType, settings)
     return StatusResponse(status=Status.running)
 
+@app.post("/FindInterface/{lType}")
+async def get_FindInterface(lType: str):
+    interfaceFound, interfacePosition = extractor.returnFindInterface(lType)
+    return {"interfaceFound":interfaceFound,"interfacePosition":interfacePosition,"error":extractor.error}
 
 @app.get("/drainToPort/{port}/{ml}", response_model=StatusResponse)
 def get_drainToPort(port: int, ml: float, background_tasks: BackgroundTasks):
@@ -684,6 +709,15 @@ def getImageData(id: int = None):
 
     # return {"imageFolderPath":imageFolderPath,"imageList":imageList,"parentPath":parentPath}
     return zipfiles(imageList)
+
+    # return {"imageData": returnJson}
+
+# #Get /imageData Procedures
+@app.get("/countNumber")
+def getcountNumber():
+    countNumber = extractor.getLastCountId()
+    # return {"imageFolderPath":imageFolderPath,"imageList":imageList,"parentPath":parentPath}
+    return {"countNumber":countNumber}
 
     # return {"imageData": returnJson}
 
