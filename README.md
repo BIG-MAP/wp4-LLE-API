@@ -41,3 +41,7 @@ To stop the API press CTRL-C in the command line window the API is running on. T
 To update the API, stop it, open a terminal in Linux or the GIT CMD program in Windows, navigate to the folder containing this README file (use the `cd` command), and run the following command:
 
 `git pull`
+
+# Data
+
+This repository also contains the data obtained for the paper *Movable optical sensor for automatic detection and monitoring of liquid-liquid interfaces* submitted to the SLAS Technology Journal.
