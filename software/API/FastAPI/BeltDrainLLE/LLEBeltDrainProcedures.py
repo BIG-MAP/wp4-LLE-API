@@ -283,7 +283,7 @@ def findInterface(dataLight, smoothWindowSize: int, smoothProminence: float, gra
             smoothWindowSize = 5
             smoothProminence = 1/15
             inverseSmoothProminence =1/15
-            gradientProminence = 1
+            gradientProminence = 1/40
             gradient2Prominence=1/3
 
             interfaces = []
